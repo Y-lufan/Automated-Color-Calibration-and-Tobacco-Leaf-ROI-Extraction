@@ -6,7 +6,7 @@ function main()
     clc; close all; clear;
     
     %% -------- 0. Specify Image Path -------- %%
-    imgPath = '7-1.jpg'; % Ensure the image exists in this directory
+    imgPath = 'sample_image.jpg'; % Ensure the image exists in this directory
     
     if ~exist(imgPath, 'file')
         error('Image file not found: %s. Please check the samples folder or update imgPath.', imgPath);
