@@ -5,15 +5,15 @@ function main()
     % =========================================================================
     clc; close all; clear;
     
-    %% -------- 0. Specify Image Path --------
-    imgPath = '7-1.jpg'; % Ensure the image exists in this directory
+    %% -------- 0. Specify Image Path -------- %%
+    imgPath = 'samples/7-1.jpg'; % Ensure the image exists in this directory
     
     if ~exist(imgPath, 'file')
         error('Image file not found: %s. Please check the samples folder or update imgPath.', imgPath);
     end
     fprintf('▶ Starting analysis for: %s\n', imgPath);
     
-    %% -------- 1. Core Parameter Configuration --------
+    %% -------- 1. Core Parameter Configuration -------- %%
     % A. Color Checker Localization & Cropping Parameters
     CONF.ChartThreshold = 0.33; 
     CONF.ChartParams.MinAreaRatio = 0.002;
@@ -43,7 +43,7 @@ function main()
         243,243,242; 200,200,200; 160,160,160; 122,122,121; 85,85,85; 52,52,52
     ];
     
-    %% -------- 2. Preprocessing: Localization, Correction & Cropping --------
+    %% -------- 2. Preprocessing: Localization, Correction & Cropping -------- %%
     try
         [img_Raw, success, chartMask, ~, finalChart] = preprocessImage_V21_V27(imgPath, CONF);
         if ~success, error('Failed to locate the color checker. Try adjusting CONF.ChartThreshold.'); end
@@ -67,7 +67,7 @@ function main()
     end
 end
 
-%% ================== Core Function: Localization and Cropping ==================
+%% ================== Core Function: Localization and Cropping ================== %%
 function [img_Raw, success, chartMask, tform_final, finalChart] = preprocessImage_V21_V27(imgPath, CONF)
     success = false; [chartMask, tform_final, finalChart] = deal([]);
     img_Raw = imread(imgPath); [rawH, rawW, ~] = size(img_Raw); 
@@ -113,7 +113,7 @@ function [img_Raw, success, chartMask, tform_final, finalChart] = preprocessImag
     success = true;
 end
 
-%% ================== Rotation Correction (Anchor Bottom-Left) ==================
+%% ================== Rotation Correction (Anchor Bottom-Left) ================== %%
 function finalChart = correctChartOrientation(chartImg)
     hsv_c = rgb2hsv(chartImg); S = hsv_c(:,:,2); [cH, ~] = size(S);
     if mean(S(1:floor(cH/4), :), 'all') < mean(S(floor(3*cH/4):end, :), 'all')
@@ -126,7 +126,7 @@ function finalChart = correctChartOrientation(chartImg)
     finalChart = chartImg;
 end
 
-%% ================== Core Function: Calibration and ROI Generation ==================
+%% ================== Core Function: Calibration and ROI Generation ================== %%
 function [img_C1, img_C2, img_C3, rawChartCrop] = applyAllCorrections(img_Raw, finalChart, CONF)
     [cH, cW, ~] = size(finalChart); bH = cH/4; bW = cW/6;
     roiH = floor(bH * CONF.ChartParams.PatchROIPercent / 2); 
@@ -167,7 +167,7 @@ function [img_C1, img_C2, img_C3, rawChartCrop] = applyAllCorrections(img_Raw, f
     rawChartCrop = finalChart;
 end
 
-%% ================== Helper Functions & Visualization ==================
+%% ================== Helper Functions & Visualization ================== %%
 function bestLambda = findOptimalLambda_LOOCV(P_root, stdRGB_lin)
     lambdas = logspace(log10(0.001), log10(10), 40); nPatches = size(P_root, 1); meanErrors = zeros(size(lambdas));
     for i = 1:length(lambdas)
