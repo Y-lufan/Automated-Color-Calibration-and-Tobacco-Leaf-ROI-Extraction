@@ -5,7 +5,7 @@ function main()
     % =========================================================================
     clc; close all; clear;
     
-    %% -------- 0. Specify Image Path -------- %%   
+    %% -------- 0. Specify Image Path -------- %%
     imgPath = '7-1.jpg'; % Ensure the image exists in this directory
     
     if ~exist(imgPath, 'file')
@@ -13,7 +13,7 @@ function main()
     end
     fprintf('▶ Starting analysis for: %s\n', imgPath);
     
-    %% -------- 1. Core Parameter Configuration -------- %%   
+    %% -------- 1. Core Parameter Configuration -------- %%
     % A. Color Checker Localization & Cropping Parameters
     CONF.ChartThreshold = 0.33; 
     CONF.ChartParams.MinAreaRatio = 0.002;
